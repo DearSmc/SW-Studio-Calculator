@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="text-center">
+    <div class="Calculator_container">
+        <input type="text" class="result" id="inp" placeholder="Enter number">
+        <input type="button" name="" value="C" class="red white-text clear" onclick="clearText()">
+        <div class="first-row">
+            <input type="button" name="" value="7" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="8" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="9" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="/" class="global grey" onclick="btnClick(this)">
+        </div>
+        <div class="second-row">
+            <input type="button" name="" value="4" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="5" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="6" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="*" class="global grey" onclick="btnClick(this)">
+        </div>
+        <div class="third-row">
+            <input type="button" name="" value="1" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="2" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="3" class="global" onclick="btnClick(this)">
+            <input type="button" name="" value="-" class="global grey" onclick="btnClick(this)">
+        </div>
+
+        <div class="conflict">
+            <input type="button" name="" value="." class=" global grey" onclick="btnClick(this)">
+            <input type="button" name="" value="0" class=" global" onclick="btnClick(this)">
+            <input type="button" name="" value="+" class=" global grey" onclick="btnClick(this)">
+            <input type="button" name="" value="=" class=" global green white-text" onclick="calculate()">
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    let xmlhttp = new XMLHttpRequest();
+    function btnClick(obj) {
+        console.log(obj.value);
+        result = document.getElementById('inp');
+        result.value += obj.value;
+    }
+    function clearText() {
+        result = document.getElementById('inp');
+        result.value = "";
+    }
+
+    function calculate() {
+        result = document.getElementById('inp');
+        var lastChar = result.value[result.value.length - 1];
+        if (lastChar == " " || lastChar == ".") {
+            alert("Error input!");
+        }
+        else {
+            console.log("sent")
+            sentReq('/Home/Calculate/?number=' + result.value.replaceAll(" + ", " %2B "), 'inp'); return false;
+        }
+    }
+    function sentReq(serverpage, objID) {
+        let obj = document.getElementById(objID);
+        xmlhttp.open("GET", serverpage);
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                console.log(xmlhttp.responseText);
+                obj.value = xmlhttp.responseText;
+              
+            }
+        }
+        xmlhttp.send(null);
+    }
+</script>
+
